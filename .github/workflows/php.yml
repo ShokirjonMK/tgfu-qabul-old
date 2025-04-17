@@ -22,7 +22,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd /home/apps/tgfu-qabul-yii/
+          cd /home/dev-1/apps/tgfu-qabul-old/
           git reset --hard
           git pull origin main
           #docker compose exec php bash -c "php yii migrate"

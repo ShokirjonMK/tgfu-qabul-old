@@ -7,7 +7,6 @@
 
 namespace yii\data;
 
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
 use yii\db\Expression;
@@ -127,6 +126,7 @@ class SqlDataProvider extends BaseDataProvider
         }
 
         if ($pagination !== false) {
+            $pagination->totalCount = $this->getTotalCount();
             $limit = $pagination->getLimit();
             $offset = $pagination->getOffset();
         }

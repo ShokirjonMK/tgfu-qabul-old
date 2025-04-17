@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\bootstrap5;
@@ -291,6 +291,9 @@ class ActiveField extends \yii\widgets\ActiveField
             }
             Html::removeCssClass($this->labelOptions, $this->horizontalCssClasses['label']);
             Html::addCssClass($this->wrapperOptions, $this->horizontalCssClasses['offset']);
+        }
+        if ($this->form->layout === ActiveForm::LAYOUT_INLINE) {
+            Html::removeCssClass($this->labelOptions, 'visually-hidden');
         }
         Html::removeCssClass($this->labelOptions, 'form-label');
         unset($options['template'], $options['switch']);
@@ -608,7 +611,7 @@ class ActiveField extends \yii\widgets\ActiveField
      * @param string|null $label the label or null to use model label
      * @param array $options the tag options
      */
-    protected function renderLabelParts(string $label = null, array $options = [])
+    protected function renderLabelParts(?string $label = null, array $options = [])
     {
         $options = array_merge($this->labelOptions, $options);
         if ($label === null) {

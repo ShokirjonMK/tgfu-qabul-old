@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
 {
     public static $files = array (
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
@@ -16,9 +17,7 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         'e3b2795a8a512b6083af088fb53afe6c' => __DIR__ . '/..' . '/codeception/codeception/functions.php',
@@ -85,14 +84,9 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
             'Zxing\\' => 6,
             'ZipStream\\' => 10,
         ),
-        'T' => 
-        array (
-            'Tests\\PhpOffice\\Math\\' => 21,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php83\\' => 23,
-            'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
@@ -139,11 +133,11 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         ),
         'M' => 
         array (
-            'MyCLabs\\Enum\\' => 13,
             'Mpdf\\PsrLogAwareTrait\\' => 22,
             'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
             'Matrix\\' => 7,
+            'Masterminds\\' => 12,
             'MabeEnum\\' => 9,
         ),
         'L' => 
@@ -170,7 +164,6 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
-            'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'DeepCopy\\' => 9,
             'Da\\QrCode\\' => 10,
@@ -178,6 +171,7 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         ),
         'C' => 
         array (
+            'Composer\\Pcre\\' => 14,
             'Complex\\' => 8,
             'Codeception\\Extension\\' => 22,
             'Codeception\\' => 12,
@@ -191,18 +185,7 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         ),
         'A' => 
         array (
-            'AmoCRM\\Support\\' => 15,
-            'AmoCRM\\OAuth\\' => 13,
             'AmoCRM\\OAuth2\\Client\\Provider\\' => 30,
-            'AmoCRM\\Models\\' => 14,
-            'AmoCRM\\Helpers\\' => 15,
-            'AmoCRM\\Filters\\' => 15,
-            'AmoCRM\\Exceptions\\' => 18,
-            'AmoCRM\\Enum\\' => 12,
-            'AmoCRM\\EntitiesServices\\' => 24,
-            'AmoCRM\\Contracts\\' => 17,
-            'AmoCRM\\Collections\\' => 19,
-            'AmoCRM\\Client\\' => 14,
             'AmoCRM\\' => 7,
         ),
     );
@@ -323,17 +306,9 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
-        'Tests\\PhpOffice\\Math\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpoffice/math/tests/Math',
-        ),
         'Symfony\\Polyfill\\Php83\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
-        ),
-        'Symfony\\Polyfill\\Php72\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -484,10 +459,6 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         array (
             0 => __DIR__ . '/..' . '/phpoffice/math/src/Math',
         ),
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-        ),
         'Mpdf\\PsrLogAwareTrait\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/psr-log-aware-trait/src',
@@ -503,6 +474,10 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Masterminds\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
         'MabeEnum\\' => 
         array (
@@ -548,10 +523,6 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
-        'Doctrine\\Deprecations\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
-        ),
         'Doctrine\\Common\\Lexer\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
@@ -568,6 +539,10 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         array (
             0 => __DIR__ . '/..' . '/dasprid/enum/src',
         ),
+        'Composer\\Pcre\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/pcre/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
@@ -578,9 +553,9 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         ),
         'Codeception\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
-            1 => __DIR__ . '/..' . '/codeception/stub/src',
-            2 => __DIR__ . '/..' . '/codeception/verify/src/Codeception',
+            0 => __DIR__ . '/..' . '/codeception/verify/src/Codeception',
+            1 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
+            2 => __DIR__ . '/..' . '/codeception/stub/src',
         ),
         'Carbon\\Doctrine\\' => 
         array (
@@ -598,58 +573,14 @@ class ComposerStaticInitaabd880f3a499ced44b0b1756fabf861
         array (
             0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
-        'AmoCRM\\Support\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Support',
-        ),
-        'AmoCRM\\OAuth\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/OAuth',
-        ),
         'AmoCRM\\OAuth2\\Client\\Provider\\' => 
         array (
             0 => __DIR__ . '/..' . '/amocrm/oauth2-amocrm/src',
         ),
-        'AmoCRM\\Models\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Models',
-        ),
-        'AmoCRM\\Helpers\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Helpers',
-        ),
-        'AmoCRM\\Filters\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Filters',
-        ),
-        'AmoCRM\\Exceptions\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Exceptions',
-        ),
-        'AmoCRM\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Enum',
-        ),
-        'AmoCRM\\EntitiesServices\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/EntitiesServices',
-        ),
-        'AmoCRM\\Contracts\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Contracts',
-        ),
-        'AmoCRM\\Collections\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Collections',
-        ),
-        'AmoCRM\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM/Client',
-        ),
         'AmoCRM\\' => 
         array (
-            0 => __DIR__ . '/..' . '/dotzero/amocrm/src',
-            1 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src',
+            0 => __DIR__ . '/..' . '/amocrm/amocrm-api-library/src/AmoCRM',
+            1 => __DIR__ . '/..' . '/dotzero/amocrm/src',
         ),
     );
 

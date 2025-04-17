@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 declare(strict_types=1);
@@ -278,7 +278,7 @@ class Nav extends Widget
             return false;
         }
         if (isset($item['active'])) {
-            return ArrayHelper::getValue($item, 'active', false);
+            return (bool)ArrayHelper::getValue($item, 'active', false);
         }
         if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
             $route = $item['url'][0];
