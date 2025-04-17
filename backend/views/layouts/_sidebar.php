@@ -193,11 +193,12 @@ function getActiveTwo($cont, $act)
                 </li>
 
                 <li class="sidebar_li">
-                    <a href="<?= Url::to(['telegram/index']) ?>" class="sidebar_li_link">
-                        <i class="i-n fa-brands fa-telegram"></i>
-                        <span>Telegram bot</span>
+                    <a href="<?= Url::to(['student/all']) ?>" class="sidebar_li_link">
+                        <i class="i-n fa-solid fa-graduation-cap"></i>
+                        <span>Shartnomalar</span>
                     </a>
                 </li>
+                
 
                 <li class="sidebar_li">
                     <a href="<?= Url::to(['filial/index']) ?>" class="sidebar_li_link">
