@@ -84,7 +84,7 @@ class ExportMenu extends GridView
      */
     const FORMAT_EXCEL = 'Xls';
     /**
-     * @var string Microsoft Excel Export export format
+     * @var string Microsoft Excel 2007+ export format
      */
     const FORMAT_EXCEL_X = 'Xlsx';
     /**
@@ -1921,12 +1921,12 @@ class ExportMenu extends GridView
                 'writer' => self::FORMAT_EXCEL,
             ],
             self::FORMAT_EXCEL_X => [
-                'label' => Yii::t('kvexport', 'Excel Export'),
+                'label' => Yii::t('kvexport', 'Excel 2007+'),
                 'icon' => $notBs3 ? 'fas fa-file-excel' : ($isFa ? 'fa fa-file-excel-o' : 'glyphicon glyphicon-floppy-remove'),
                 'iconOptions' => ['class' => 'text-success'],
                 'linkOptions' => [],
-                'options' => ['title' => Yii::t('kvexport', 'Microsoft Excel Export (xlsx)')],
-                'alertMsg' => Yii::t('kvexport', 'The Excel Export (xlsx) export file will be generated for download.'),
+                'options' => ['title' => Yii::t('kvexport', 'Microsoft Excel 2007+ (xlsx)')],
+                'alertMsg' => Yii::t('kvexport', 'The EXCEL 2007+ (xlsx) export file will be generated for download.'),
                 'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'extension' => 'xlsx',
                 'writer' => self::FORMAT_EXCEL_X,

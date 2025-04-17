@@ -19,16 +19,12 @@ class BootstrapAsset extends AssetBundle
     /**
      * @inheritDoc
      */
-    public $sourcePath = '@bower/bootstrap';
+    public $sourcePath = '@bower/bootstrap/dist';
 
     /**
      * @inheritDoc
      */
     public $css = [
-        'dist/css/bootstrap.css'
-    ];
-
-    public $js = [
-        'dist/js/bootstrap.bundle.js'
+        'css/bootstrap.css'
     ];
 }

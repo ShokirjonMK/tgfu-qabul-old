@@ -18,6 +18,7 @@ use AmoCRM\EntitiesServices\CustomFieldGroups;
 use AmoCRM\EntitiesServices\CustomFields;
 use AmoCRM\EntitiesServices\EntityFiles;
 use AmoCRM\EntitiesServices\EntityNotes;
+use AmoCRM\EntitiesServices\EventTypes;
 use AmoCRM\EntitiesServices\Files;
 use AmoCRM\EntitiesServices\Sources;
 use AmoCRM\EntitiesServices\EntitySubscriptions;
@@ -385,7 +386,7 @@ class AmoCRMApiClient
      * @return CatalogElements
      * @throws InvalidArgumentException|AmoCRMMissedTokenException
      */
-    public function catalogElements(int $catalogId = null)
+    public function catalogElements(?int $catalogId = null)
     {
         $request = $this->buildRequest();
         $service = new CatalogElements($request);
@@ -443,7 +444,7 @@ class AmoCRMApiClient
      * @return CustomFieldGroups
      * @throws InvalidArgumentException|AmoCRMMissedTokenException
      */
-    public function customFieldGroups(string $entityType = null)
+    public function customFieldGroups(?string $entityType = null)
     {
         $request = $this->buildRequest();
 
@@ -563,6 +564,19 @@ class AmoCRMApiClient
         $request = $this->buildRequest();
 
         return new Events($request);
+    }
+
+    /**
+     * Метод вернет объект событий
+     *
+     * @return EventTypes
+     * @throws AmoCRMMissedTokenException
+     */
+    public function eventTypes(): EventTypes
+    {
+        $request = $this->buildRequest();
+
+        return new EventTypes($request);
     }
 
     /**

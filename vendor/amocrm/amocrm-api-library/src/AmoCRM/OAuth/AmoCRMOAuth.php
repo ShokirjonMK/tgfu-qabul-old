@@ -5,6 +5,7 @@ namespace AmoCRM\OAuth;
 use AmoCRM\Exceptions\DisposableTokenExpiredException;
 use AmoCRM\Exceptions\DisposableTokenInvalidDestinationException;
 use AmoCRM\Exceptions\DisposableTokenVerificationFailedException;
+use AmoCRM\Exceptions\InvalidArgumentException;
 use AmoCRM\Models\AccountDomainModel;
 use AmoCRM\Models\BotDisposableTokenModel;
 use AmoCRM\Models\DisposableTokenModel;
@@ -24,6 +25,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use GuzzleHttp\Psr7\Uri;
 use Lcobucci\Clock\FrozenClock;
+use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Hmac\Sha512;
@@ -31,7 +33,6 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
-use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\ConstraintViolation;
 use League\OAuth2\Client\Grant\AuthorizationCode;
 use League\OAuth2\Client\Grant\RefreshToken;
@@ -39,11 +40,17 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Token\AccessTokenInterface;
+use RuntimeException;
+use Throwable;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
+use Lcobucci\JWT\Validation\Constraint\ValidAt;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 
 use function sprintf;
 
 /**
  * Class AmoCRMOAuth
+ *
  * @package AmoCRM\OAuth
  */
 class AmoCRMOAuth
@@ -124,6 +131,7 @@ class AmoCRMOAuth
 
     /**
      * Получение Access токена по коду авторизации
+     *
      * @param string $code
      *
      * @return AccessTokenInterface
@@ -150,6 +158,7 @@ class AmoCRMOAuth
 
     /**
      * Получение нового Access токена по Refresh токену
+     *
      * @param AccessTokenInterface $accessToken
      *
      * @return AccessTokenInterface
@@ -162,13 +171,44 @@ class AmoCRMOAuth
                 'refresh_token' => $accessToken->getRefreshToken(),
             ]);
         } catch (IdentityProviderException $e) {
-            throw new AmoCRMoAuthApiException(
-                $e->getMessage(),
-                $e->getCode(),
-                [],
-                $e->getResponseBody(),
-                $e
-            );
+            if (
+                in_array(
+                    $e->getCode(),
+                    [
+                        StatusCodeInterface::STATUS_NOT_FOUND,
+                        StatusCodeInterface::STATUS_UNAUTHORIZED,
+                    ],
+                    true
+                )
+            ) {
+                $accountDomainModel = $this->getAccountDomainByRefreshToken($accessToken);
+                $this->setBaseDomain($accountDomainModel->getDomain());
+
+                try {
+                    $accessToken = $this->oauthProvider->getAccessToken(
+                        new RefreshToken(),
+                        [
+                            'refresh_token' => $accessToken->getRefreshToken(),
+                        ]
+                    );
+                } catch (IdentityProviderException $e) {
+                    throw new AmoCRMoAuthApiException(
+                        $e->getMessage(),
+                        $e->getCode(),
+                        [],
+                        $e->getResponseBody(),
+                        $e
+                    );
+                }
+            } else {
+                throw new AmoCRMoAuthApiException(
+                    $e->getMessage(),
+                    $e->getCode(),
+                    [],
+                    $e->getResponseBody(),
+                    $e
+                );
+            }
         }
 
         if (is_callable($this->accessTokenRefreshCallback)) {
@@ -192,6 +232,7 @@ class AmoCRMOAuth
 
     /**
      * Установка базового домена, куда будут отправляться запросы необходимые для работы с токенами
+     *
      * @param string $domain
      *
      * @return $this
@@ -205,6 +246,7 @@ class AmoCRMOAuth
 
     /**
      * Установка протокола
+     *
      * @param string $protocol
      *
      * @return $this
@@ -242,6 +284,7 @@ class AmoCRMOAuth
 
     /**
      * Получение авторизационных заголовков для переданного Access токена
+     *
      * @param AccessTokenInterface $accessToken
      *
      * @return array
@@ -263,6 +306,7 @@ class AmoCRMOAuth
 
     /**
      * Установка Callback при обновлении Access токена по
+     *
      * @param callable $function
      *
      * @return AmoCRMOAuth
@@ -276,6 +320,7 @@ class AmoCRMOAuth
 
     /**
      * Получение данных о том, кому принадлежит токен
+     *
      * @param AccessTokenInterface $accessToken
      *
      * @return ResourceOwnerInterface
@@ -404,6 +449,8 @@ class AmoCRMOAuth
      * @throws AmoCRMApiErrorResponseException
      * @throws AmoCRMApiConnectExceptionException
      * @throws AmoCRMApiHttpClientException
+     *
+     * @deprecated
      */
     public function getAccountDomain(AccessTokenInterface $accessToken): AccountDomainModel
     {
@@ -418,6 +465,60 @@ class AmoCRMOAuth
                 ),
                 [
                     'headers' => $this->oauthProvider->getHeaders($accessToken),
+                    'connect_timeout' => AmoCRMApiRequest::CONNECT_TIMEOUT,
+                    'http_errors' => false,
+                    'timeout' => self::REQUEST_TIMEOUT,
+                    'query' => [],
+                    'json' => [],
+                ]
+            );
+
+            $responseBody = (string)$response->getBody();
+            if ($response->getStatusCode() !== StatusCodeInterface::STATUS_OK) {
+                throw new AmoCRMApiErrorResponseException(
+                    'Invalid response',
+                    $response->getStatusCode(),
+                    [],
+                    $responseBody
+                );
+            }
+            $response = json_decode($responseBody, true);
+            $accountDomainModel = AccountDomainModel::fromArray($response);
+        } catch (ConnectException $e) {
+            throw new AmoCRMApiConnectExceptionException($e->getMessage(), $e->getCode());
+        } catch (GuzzleException $e) {
+            throw new AmoCRMApiHttpClientException($e->getMessage(), $e->getCode());
+        }
+
+        return $accountDomainModel;
+    }
+
+    /**
+     * Получение субдомена аккаунта по рефреш токену
+     *
+     * @param AccessTokenInterface $accessToken
+     *
+     * @return AccountDomainModel
+     * @throws AmoCRMApiConnectExceptionException
+     * @throws AmoCRMApiErrorResponseException
+     * @throws AmoCRMApiHttpClientException
+     * @throws InvalidArgumentException
+     */
+    public function getAccountDomainByRefreshToken(AccessTokenInterface $accessToken): AccountDomainModel
+    {
+        $sharedApiDomain = $this->getSharedApiDomain($accessToken);
+
+        try {
+            $response = $this->oauthProvider->getHttpClient()->request(
+                AmoCRMApiRequest::GET_REQUEST,
+                sprintf(
+                    '%s%s%s',
+                    $this->oauthProvider->getProtocol(),
+                    $sharedApiDomain,
+                    '/oauth2/account/current/subdomain'
+                ),
+                [
+                    'headers' => ['X-Refresh-Token' => $accessToken->getRefreshToken()],
                     'connect_timeout' => AmoCRMApiRequest::CONNECT_TIMEOUT,
                     'http_errors' => false,
                     'timeout' => self::REQUEST_TIMEOUT,
@@ -464,6 +565,8 @@ class AmoCRMOAuth
         $signer = new Sha256();
         $key = InMemory::plainText($this->clientSecret);
 
+        $validAtConstraint = $this->createValidAtConstraint();
+
         $clientBaseUri = new Uri($this->redirectUri);
         $clientBaseUri = sprintf('%s://%s', $clientBaseUri->getScheme(), $clientBaseUri->getHost());
         $constraints = [
@@ -472,7 +575,7 @@ class AmoCRMOAuth
             // Проверим наш ли адресат
             new PermittedFor($clientBaseUri),
             // Проверка жизни токена
-            new LooseValidAt(FrozenClock::fromUTC()),
+            $validAtConstraint,
         ];
 
         $configuration = Configuration::forSymmetricSigner($signer, $key);
@@ -484,12 +587,13 @@ class AmoCRMOAuth
                 $constraint->assert($jwtToken);
             }
         } catch (ConstraintViolation $e) {
+            $validAtConstraintClassName = get_class($validAtConstraint);
             switch (true) {
                 case $constraint instanceof SignedWith:
                     throw DisposableTokenVerificationFailedException::create();
                 case $constraint instanceof PermittedFor:
                     throw DisposableTokenInvalidDestinationException::create();
-                case $constraint instanceof LooseValidAt:
+                case $constraint instanceof $validAtConstraintClassName:
                     throw DisposableTokenExpiredException::create();
             }
         }
@@ -510,16 +614,18 @@ class AmoCRMOAuth
      * @throws DisposableTokenVerificationFailedException
      * @link https://www.amocrm.ru/developers/content/web_sdk/mechanics
      */
-    public function parseBotDisposableToken(string $token, string $receiverPath = null): BotDisposableTokenModel
+    public function parseBotDisposableToken(string $token, ?string $receiverPath = null): BotDisposableTokenModel
     {
         $signer = new Sha512();
         $key = InMemory::plainText($this->clientSecret);
+
+        $validAtConstraint = $this->createValidAtConstraint();
 
         $constraints = [
             // Проверка подписи
             new SignedWith($signer, $key),
             // Проверка жизни токена, с 4.2 deprecated use LooseValidAt
-            new LooseValidAt(FrozenClock::fromUTC()),
+            $validAtConstraint,
         ];
 
         if ($receiverPath !== null) {
@@ -537,16 +643,88 @@ class AmoCRMOAuth
                 $constraint->assert($jwtToken);
             }
         } catch (ConstraintViolation $e) {
+            $validAtConstraintClassName = get_class($validAtConstraint);
             switch (true) {
                 case $constraint instanceof SignedWith:
                     throw DisposableTokenVerificationFailedException::create();
                 case $constraint instanceof PermittedFor:
                     throw DisposableTokenInvalidDestinationException::create();
-                case $constraint instanceof LooseValidAt:
+                case $constraint instanceof $validAtConstraintClassName:
                     throw DisposableTokenExpiredException::create();
             }
         }
 
         return BotDisposableTokenModel::fromJwtToken($jwtToken);
+    }
+
+    /**
+     * Получает домен для общих api методов из access токена, домен присутствует в токенах выписанных после 21.08.2024
+     *
+     * @param AccessTokenInterface $accessToken
+     *
+     * @return string
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getSharedApiDomain(AccessTokenInterface $accessToken): string
+    {
+        try {
+            $signer = new Sha256();
+            $key = InMemory::plainText($this->clientSecret);
+            $configuration = Configuration::forSymmetricSigner($signer, $key);
+            $parsedToken = $configuration->parser()->parse($accessToken->getToken());
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException(
+                'Error parsing given access token. Prev error: ' . $e->getMessage(),
+                0,
+                [],
+                'Check access token.'
+            );
+        }
+
+        $claims = $parsedToken->claims();
+        $apiDomain = $claims->get('api_domain');
+
+        if (empty($apiDomain)) {
+            throw new InvalidArgumentException(
+                'Token does not contain shared api domain.',
+                0,
+                [],
+                'Update your access token.'
+            );
+        }
+
+        return $apiDomain;
+    }
+
+    /**
+     * Создает и возвращает объект ограничения проверки времени действия токена.
+     *
+     * Метод динамически выбирает между `LooseValidAt` и `StrictValidAt` и `ValidAt` (приоритет у `LooseValidAt`).
+     * Также автоматически выбирает подходящий класс часов (`FrozenClock` или `SystemClock`).
+     *
+     * @psalm-suppress UndefinedClass
+     * @return Constraint
+     * @throws RuntimeException Если ни один из классов `LooseValidAt` или `StrictValidAt`, или `ValidAt` недоступен.
+     */
+    private function createValidAtConstraint(): Constraint
+    {
+        $availableConstraints = [
+            LooseValidAt::class,
+            StrictValidAt::class,
+            ValidAt::class,
+        ];
+
+        foreach ($availableConstraints as $constraintClass) {
+            if (class_exists($constraintClass)) {
+                $clockClass = class_exists(FrozenClock::class)
+                    ? FrozenClock::class
+                    : SystemClock::class;
+
+                return new $constraintClass($clockClass::fromUTC());
+            }
+        }
+
+        throw new RuntimeException('Neither LooseValidAt nor StrictValidAt nor ValidAt are available.');
     }
 }

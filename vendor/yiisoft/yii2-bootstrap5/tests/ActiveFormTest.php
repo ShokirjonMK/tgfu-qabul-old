@@ -184,7 +184,7 @@ HTML;
 <div class="mb-3 field-dynamicmodel-checkboxname">
 <div class="form-check">
 <input type="hidden" name="DynamicModel[checkboxName]" value="0"><input type="checkbox" id="dynamicmodel-checkboxname" class="form-check-input" name="DynamicModel[checkboxName]" value="1">
-<label class="visually-hidden form-check-label" for="dynamicmodel-checkboxname">Checkbox Name</label>
+<label class="form-check-label" for="dynamicmodel-checkboxname">Checkbox Name</label>
 
 
 </div>
@@ -397,7 +397,7 @@ HTML;
     {
         $form = ActiveForm::widget();
 
-        $this->assertNotContains('role="form"', $form);
+        $this->assertStringNotContainsString('role="form"', $form);
     }
 
     public function testErrorSummaryRendering()
@@ -418,7 +418,7 @@ HTML;
         $this->assertContainsWithoutLE('<div class="alert alert-danger"', $out);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // dirty way to have Request object not throwing exception when running testFormNoRoleAttribute()
         $_SERVER['REQUEST_URI'] = "index.php";

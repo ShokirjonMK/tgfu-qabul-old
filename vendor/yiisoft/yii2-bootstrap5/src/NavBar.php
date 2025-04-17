@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 declare(strict_types=1);
@@ -75,6 +75,12 @@ class NavBar extends Widget
      * @since 2.0.8
      */
     public $brandImage = false;
+
+    /**
+     * @var array the HTML attributes of the brand image.
+     * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
+     */
+    public $brandImageOptions = [];
     /**
      * @var array|string|bool $url the URL for the brand's hyperlink tag. This parameter will be processed by [[\yii\helpers\Url::to()]]
      * and will be used for the "href" attribute of the brand link. Default value is false that means
@@ -144,7 +150,7 @@ class NavBar extends Widget
             $this->offcanvasOptions['id'] = "{$this->options['id']}-offcanvas";
         }
         if ($this->brandImage !== false) {
-            $this->brandLabel = Html::img($this->brandImage);
+            $this->brandLabel = Html::img($this->brandImage, $this->brandImageOptions);
         }
         if ($this->brandLabel !== false) {
             Html::addCssClass($this->brandOptions, ['widget' => 'navbar-brand']);
@@ -210,16 +216,19 @@ class NavBar extends Widget
      */
     protected function renderToggleButton(): string
     {
+        if ($this->collapseOptions === false && $this->offcanvasOptions === false) {
+            return '';
+        }
+
         $options = $this->togglerOptions;
         Html::addCssClass($options, ['widget' => 'navbar-toggler']);
         if ($this->offcanvasOptions !== false) {
             $bsData = ['bs-toggle' => 'offcanvas', 'bs-target' => '#' . $this->offcanvasOptions['id']];
             $aria = $this->offcanvasOptions['id'];
-        } else {
+        } elseif ($this->collapseOptions !== false) {
             $bsData = ['bs-toggle' => 'collapse', 'bs-target' => '#' . $this->collapseOptions['id']];
             $aria = $this->collapseOptions['id'];
         }
-
 
         return Html::button(
             $this->togglerContent,
