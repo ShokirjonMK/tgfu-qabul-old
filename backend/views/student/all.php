@@ -181,7 +181,7 @@ $user = Yii::$app->user->identity;
             'format' => 'raw',
             'value' => function($model) {
                 $user = $model->user;
-                return \common\models\User::getDomen($user->cons_id, 'name') ?? 'qabul.tgfu.uz';
+                return \common\models\User::getDomen($user->cons_id, 'name') ?? 'old.tgfu.uz';
             },
         ],
         [

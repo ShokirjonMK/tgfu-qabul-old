@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f97f5c0c-3e8f-4c47-b86d-8ad4c2f17f98" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/views/student/all.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/student/all.php" afterDir="false" />
-    </list>
+    <list default="true" id="f97f5c0c-3e8f-4c47-b86d-8ad4c2f17f98" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -219,7 +217,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744876609381</updated>
-      <workItem from="1744876610470" duration="2385000" />
+      <workItem from="1744876610470" duration="2879000" />
     </task>
     <servers />
   </component>

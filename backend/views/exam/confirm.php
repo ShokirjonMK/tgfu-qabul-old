@@ -65,8 +65,8 @@ $js = <<<JS
 $(document).ready(function() {
         $(".check-exam-form #examsubject-file_status").on('change', function () {
             var id = $(this).val();
-            var text2 = 'Tabriklaymiz! Sizning “TOSHKENT GUMANITAR FANLAR UNIVERSITETI”ga topshirgan  sertifikatingiz tasdiqlandi va sizga fan blokidan maksimal ball berildi. To\'lov shartnomasini yuklab olishni unutmang. Shartnomangizni https://qabul.tgfu.uz sayti orqali yuklab oling. Aloqa markazi: 78 888 66 66';
-            var text3 = 'Hurmatli abituriyent! Sizning “TOSHKENT GUMANITAR FANLAR UNIVERSITETI”ga topshirgan  sertifikatingiz rad etildi. Online test topshirib to\'lov shartnomasini yuklab olishni unutmang. Shartnomangizni https://qabul.tgfu.uz sayti orqali yuklab oling. Aloqa markazi: 78 888 66 66';
+            var text2 = 'Tabriklaymiz! Sizning “TOSHKENT GUMANITAR FANLAR UNIVERSITETI”ga topshirgan  sertifikatingiz tasdiqlandi va sizga fan blokidan maksimal ball berildi. To\'lov shartnomasini yuklab olishni unutmang. Shartnomangizni https://old.tgfu.uz sayti orqali yuklab oling. Aloqa markazi: 78 888 66 66';
+            var text3 = 'Hurmatli abituriyent! Sizning “TOSHKENT GUMANITAR FANLAR UNIVERSITETI”ga topshirgan  sertifikatingiz rad etildi. Online test topshirib to\'lov shartnomasini yuklab olishni unutmang. Shartnomangizni https://old.tgfu.uz sayti orqali yuklab oling. Aloqa markazi: 78 888 66 66';
             if (id == 3) {
                 $(".check-exam-form #examsubject-sms_text").val(text3)
             } else {

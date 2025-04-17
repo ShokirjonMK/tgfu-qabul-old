@@ -110,7 +110,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getDomen($key, $type = 'id')
     {
         $mapping = [
-            1  => 'qabul.tgfu.uz',
+            1  => 'old.tgfu.uz',
             2  => 'edu.tgfu.uz',
         ];
 
