@@ -89,7 +89,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active mt-1'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 2) {
                     $exam = \common\models\StudentPerevot::findOne([
@@ -99,7 +99,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active mt-1'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 3) {
                     $exam = StudentDtm::findOne([
@@ -109,7 +109,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active mt-1'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 4) {
                     $exam = \common\models\StudentMagistr::findOne([
@@ -119,7 +119,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active mt-1'>".$exam->contract_third."</div>";
                     }
                 }
                 return "----";
