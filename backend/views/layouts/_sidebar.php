@@ -198,7 +198,7 @@ function getActiveTwo($cont, $act)
                         <span>Shartnomalar</span>
                     </a>
                 </li>
-                
+
 
                 <li class="sidebar_li">
                     <a href="<?= Url::to(['filial/index']) ?>" class="sidebar_li_link">

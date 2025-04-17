@@ -21,6 +21,8 @@ class StudentSearch extends Student
     public $step;
     public $start_date;
     public $end_date;
+    public $cons_id;
+
 
 
     /**
@@ -30,7 +32,7 @@ class StudentSearch extends Student
     public function rules()
     {
         return [
-            [['id','user_id', 'gender','language_id', 'edu_form_id','edu_year_form_id', 'direction_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by', 'is_deleted' , 'step' , 'filial_id'], 'integer'],
+            [['id', 'cons_id', 'user_id', 'gender','language_id', 'edu_form_id','edu_year_form_id', 'direction_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by', 'is_deleted' , 'step' , 'filial_id'], 'integer'],
             [['username'], 'string' , 'max' => 255],
             [['full_name','first_name', 'last_name','passport_number', 'passport_serial', 'middle_name', 'recorded_date', 'start_date', 'end_date', 'adress',  'password', 'exam_type'], 'safe'],
         ];
