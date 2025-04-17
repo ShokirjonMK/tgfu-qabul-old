@@ -67,11 +67,12 @@ $user = Yii::$app->user->identity;
             },
         ],
         [
-            'attribute' => 'Ro\'yxatga olingan sana',
-            'contentOptions' => ['date-label' => 'Ro\'yxatga olingan sana'],
+            'attribute' => 'Yo\'nalishi',
+            'contentOptions' => ['date-label' => 'Yo\'nalishi'],
             'format' => 'raw',
             'value' => function($model) {
-                return "<div><div>". date("Y-m-d H:i:s" , $model->user->created_at) ."</div></div>";
+                $direction = $model->direction;
+                return $direction->code.' - '.$direction->name_uz;
             },
         ],
         [
@@ -88,7 +89,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return $exam->contract_second." - ".$exam->contract_third;
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 2) {
                     $exam = \common\models\StudentPerevot::findOne([
@@ -98,7 +99,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return $exam->contract_second." - ".$exam->contract_third;
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 3) {
                     $exam = StudentDtm::findOne([
@@ -108,7 +109,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return $exam->contract_second." - ".$exam->contract_third;
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
                     }
                 } elseif ($model->edu_type_id == 4) {
                     $exam = \common\models\StudentMagistr::findOne([
@@ -118,7 +119,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return $exam->contract_second." - ".$exam->contract_third;
+                        return "<div class='badge-table-div active'>".$exam->contract_second."</div><br><div class='badge-table-div active'>".$exam->contract_third."</div>";
                     }
                 }
                 return "----";
@@ -138,7 +139,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'> ".$cons->code."Q2/".$model->direction->code."/".$exam->id." </div><div class='badge-table-div active mt-1'> ".$cons->code."Q3/".$model->direction->code."/".$exam->id." </div>";
+                        return "<div class='badge-table-div active'> ".$cons->code."Q2/".$model->direction->code."/".$exam->id." </div><br><div class='badge-table-div active mt-1'> ".$cons->code."Q3/".$model->direction->code."/".$exam->id." </div>";
                     }
                 } elseif ($model->edu_type_id == 3) {
                     $exam = StudentDtm::findOne([
@@ -148,7 +149,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'> ".$cons->code."D2/".$model->direction->code."/".$exam->id." </div><div class='badge-table-div active mt-1'> ".$cons->code."D3/".$model->direction->code."/".$exam->id." </div>";
+                        return "<div class='badge-table-div active'> ".$cons->code."D2/".$model->direction->code."/".$exam->id." </div><br><div class='badge-table-div active mt-1'> ".$cons->code."D3/".$model->direction->code."/".$exam->id." </div>";
                     }
                 }  elseif ($model->edu_type_id == 2) {
                     $exam = \common\models\StudentPerevot::findOne([
@@ -158,7 +159,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'> ".$cons->code."P2/".$model->direction->code."/".$exam->id." </div><div class='badge-table-div active mt-1'> ".$cons->code."P3/".$model->direction->code."/".$exam->id." </div>";
+                        return "<div class='badge-table-div active'> ".$cons->code."P2/".$model->direction->code."/".$exam->id." </div><br><div class='badge-table-div active mt-1'> ".$cons->code."P3/".$model->direction->code."/".$exam->id." </div>";
                     }
                 } elseif ($model->edu_type_id == 4) {
                     $exam = \common\models\StudentMagistr::findOne([
@@ -168,7 +169,7 @@ $user = Yii::$app->user->identity;
                         'is_deleted' => 0
                     ]);
                     if ($exam) {
-                        return "<div class='badge-table-div active'> ".$cons->code."M2/".$model->direction->code."/".$exam->id." </div><div class='badge-table-div active mt-1'> ".$cons->code."M3/".$model->direction->code."/".$exam->id." </div>";
+                        return "<div class='badge-table-div active'> ".$cons->code."M2/".$model->direction->code."/".$exam->id." </div><br><div class='badge-table-div active mt-1'> ".$cons->code."M3/".$model->direction->code."/".$exam->id." </div>";
                     }
                 }
                 return "----";
