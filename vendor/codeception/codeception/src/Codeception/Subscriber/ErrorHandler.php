@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Codeception\Subscriber;
 
+use Codeception\Event\SuiteEvent;
+use Codeception\Events;
 use Codeception\Exception\Deprecation;
 use Codeception\Exception\Error;
 use Codeception\Exception\Notice;
 use Codeception\Exception\Warning;
-use Codeception\Event\SuiteEvent;
-use Codeception\Events;
 use Codeception\Lib\Notification;
 use PHPUnit\Framework\Error\Deprecated as PHPUnit9Deprecation;
 use PHPUnit\Framework\Error\Error as PHPUnit9Error;
@@ -21,7 +21,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use function call_user_func;
 use function class_exists;
-use function count;
 use function error_get_last;
 use function error_reporting;
 use function getenv;
@@ -72,7 +71,12 @@ class ErrorHandler implements EventSubscriberInterface
 
     public function __construct()
     {
-        $this->errorLevel = E_ALL & ~E_STRICT & ~E_DEPRECATED;
+        // E_STRICT is deprecated in PHP 8.4
+        if (\PHP_VERSION_ID < 80400) {
+            $this->errorLevel = E_ALL & ~E_STRICT & ~E_DEPRECATED;
+        } else {
+            $this->errorLevel = E_ALL & ~E_DEPRECATED;
+        }
     }
 
     public function onFinish(SuiteEvent $event): void
@@ -99,7 +103,7 @@ class ErrorHandler implements EventSubscriberInterface
         // and silence DeprecationErrorHandler yelling about 'THE ERROR HANDLER HAS CHANGED!'
         register_shutdown_function([$this, 'shutdownHandler']);
         $this->registerDeprecationErrorHandler();
-        $this->oldHandler = set_error_handler([$this, 'errorHandler']);
+        $this->oldHandler = set_error_handler($this->errorHandler(...));
         $this->initialized = true;
     }
 
@@ -122,7 +126,7 @@ class ErrorHandler implements EventSubscriberInterface
         if (PHPUnitVersion::series() < 10) {
             throw match ($errNum) {
                 E_DEPRECATED, E_USER_DEPRECATED => new PHPUnit9Deprecation($errMsg, $errNum, $errFile, $errLine),
-                E_NOTICE, E_STRICT, E_USER_NOTICE => new PHPUnit9Notice($errMsg, $errNum, $errFile, $errLine),
+                E_NOTICE, E_USER_NOTICE => new PHPUnit9Notice($errMsg, $errNum, $errFile, $errLine),
                 E_WARNING, E_USER_WARNING => new PHPUnit9Warning($errMsg, $errNum, $errFile, $errLine),
                 default => new PHPUnit9Error($errMsg, $errNum, $errFile, $errLine),
             };
@@ -130,7 +134,7 @@ class ErrorHandler implements EventSubscriberInterface
             $errMsg .= ' at ' . $errFile . ':' . $errLine;
             throw match ($errNum) {
                 E_DEPRECATED, E_USER_DEPRECATED => new Deprecation($errMsg, $errNum, $errFile, $errLine),
-                E_NOTICE, E_STRICT, E_USER_NOTICE => new Notice($errMsg, $errNum, $errFile, $errLine),
+                E_NOTICE, E_USER_NOTICE => new Notice($errMsg, $errNum, $errFile, $errLine),
                 E_WARNING, E_USER_WARNING => new Warning($errMsg, $errNum, $errFile, $errLine),
                 default => new Error($errMsg, $errNum, $errFile, $errLine),
             };
@@ -184,7 +188,7 @@ class ErrorHandler implements EventSubscriberInterface
             if (
                 $old
                 && is_array($old)
-                && count($old) > 0
+                && $old !== []
                 && $old[0] instanceof \Symfony\Component\Debug\ErrorHandler
             ) {
                 restore_error_handler();
