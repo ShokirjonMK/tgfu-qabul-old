@@ -1,0 +1,37 @@
+name: tests
+on: [push]
+
+jobs:
+  test:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: setup enviroment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Install laravel dependencies (testings purpose)
+        run: (cd ./tests/_laravel && composer install)
+
+      - name: Create laravel env file
+        run: (cd ./tests/_laravel && cp .env.example .env)
+        
+      - name: Create Laravel Tests app Key
+        run: (cd ./tests/_laravel && php artisan key:generate)
+
+      - name: Run unit tests
+        run: ./vendor/bin/codecept run --coverage --coverage-xml ./coverage.xml
+
+      - name: Upload coverage reports to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./tests/_output/coverage.xml
