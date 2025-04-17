@@ -14,7 +14,17 @@ use kartik\export\ExportMenu;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var \common\models\EduYearType $edu_type */
 
-$this->title = Yii::t('app', 'Students');
+$text = 'Qabul';
+if ($edu_type->edu_type_id == 2) {
+    $text = 'O\'qishni ko\'chirish';
+} elseif ($edu_type->edu_type_id == 3) {
+    $text = 'DTM';
+} elseif ($edu_type->edu_type_id == 4) {
+    $text = 'Magistr';
+}
+
+
+$this->title = $text;
 $breadcrumbs['item'][] = [
     'label' => Yii::t('app', 'Bosh sahifa'),
     'url' => ['/'],

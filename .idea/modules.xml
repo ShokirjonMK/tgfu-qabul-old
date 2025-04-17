@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/tgfu-qabul-yii.iml" filepath="$PROJECT_DIR$/.idea/tgfu-qabul-yii.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/tgfu-qabul-old.iml" filepath="$PROJECT_DIR$/.idea/tgfu-qabul-old.iml" />
     </modules>
   </component>
 </project>

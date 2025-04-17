@@ -107,6 +107,25 @@ class User extends ActiveRecord implements IdentityInterface
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
+    public static function getDomen($key, $type = 'id')
+    {
+        $mapping = [
+            1  => 'qabul.tgfu.uz',
+            2  => 'edu.tgfu.uz',
+        ];
+
+        if ($type === 'name') {
+            return $mapping[$key] ?? null;
+        }
+
+        if ($type === 'id') {
+            $reverse = array_flip($mapping); // domen => id
+            return $reverse[$key] ?? null;
+        }
+
+        return null;
+    }
+
     /**
      * Finds user by username
      *

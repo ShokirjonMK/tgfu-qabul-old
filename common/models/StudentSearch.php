@@ -32,7 +32,7 @@ class StudentSearch extends Student
         return [
             [['id','user_id', 'gender','language_id', 'edu_form_id','edu_year_form_id', 'direction_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by', 'is_deleted' , 'step' , 'filial_id'], 'integer'],
             [['username'], 'string' , 'max' => 255],
-            [['full_name','first_name', 'last_name', 'middle_name', 'recorded_date', 'start_date', 'end_date', 'adress',  'password', 'exam_type'], 'safe'],
+            [['full_name','first_name', 'last_name','passport_number', 'passport_serial', 'middle_name', 'recorded_date', 'start_date', 'end_date', 'adress',  'password', 'exam_type'], 'safe'],
         ];
     }
 
@@ -184,6 +184,8 @@ class StudentSearch extends Student
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
             ->andFilterWhere(['like', 'last_name', $this->last_name])
             ->andFilterWhere(['like', 'middle_name', $this->middle_name])
+            ->andFilterWhere(['like', 'passport_serial', $this->passport_serial])
+            ->andFilterWhere(['like', 'passport_number', $this->passport_number])
             ->andFilterWhere(['like', 'first_name', $this->full_name])
             ->orFilterWhere(['like', 'last_name', $this->full_name])
             ->orFilterWhere(['like', 'middle_name', $this->full_name])
@@ -274,11 +276,87 @@ class StudentSearch extends Student
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
             ->andFilterWhere(['like', 'last_name', $this->last_name])
             ->andFilterWhere(['like', 'middle_name', $this->middle_name])
+            ->andFilterWhere(['like', 'passport_serial', $this->passport_serial])
+            ->andFilterWhere(['like', 'passport_number', $this->passport_number])
             ->andFilterWhere(['like', 'first_name', $this->full_name])
             ->orFilterWhere(['like', 'last_name', $this->full_name])
             ->orFilterWhere(['like', 'middle_name', $this->full_name])
             ->andFilterWhere(['like', 'adress', $this->adress])
             ->andFilterWhere(['like', 'password', $this->password]);
+        return $dataProvider;
+    }
+
+
+    public function all($params)
+    {
+        $query = Student::find()
+            ->andWhere(['in', 'user_id', User::find()
+                ->select('id')
+                ->andWhere(['user_role' => 'student'])
+                ->andWhere(['status' => 10])])
+            ->andWhere([
+                'or',
+                ['exists', (new \yii\db\Query())
+                    ->from('exam')
+                    ->where('exam.student_id = student.id')
+                    ->andWhere(['exam.status' => 3, 'exam.is_deleted' => 0])],
+                ['exists', (new \yii\db\Query())
+                    ->from('student_perevot')
+                    ->where('student_perevot.student_id = student.id')
+                    ->andWhere(['student_perevot.status' => 1, 'student_perevot.file_status' => 2, 'student_perevot.is_deleted' => 0])],
+                ['exists', (new \yii\db\Query())
+                    ->from('student_dtm')
+                    ->where('student_dtm.student_id = student.id')
+                    ->andWhere(['student_dtm.status' => 1, 'student_dtm.file_status' => 2, 'student_dtm.is_deleted' => 0])],
+                ['exists', (new \yii\db\Query())
+                    ->from('student_magistr')
+                    ->where('student_magistr.student_id = student.id')
+                    ->andWhere(['student_magistr.status' => 1, 'student_magistr.file_status' => 2, 'student_magistr.is_deleted' => 0])],
+            ]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'gender' => $this->gender,
+            'language_id' => $this->language_id,
+            'edu_year_form_id' => $this->edu_year_form_id,
+            'direction_id' => $this->direction_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
+            'is_deleted' => $this->is_deleted,
+        ]);
+
+        if ($this->username != '+998 (__) ___-__-__') {
+            $query->andFilterWhere(['like', 'username', $this->username]);
+        }
+
+        if ($this->cons_id != null) {
+            $query->andWhere(['in' , 'user_id' , User::find()->select('id')->where(['cons_id' => $this->cons_id])]);
+        }
+
+        $query->andFilterWhere(['like', 'first_name', $this->first_name])
+            ->andFilterWhere(['like', 'last_name', $this->last_name])
+            ->andFilterWhere(['like', 'middle_name', $this->middle_name])
+            ->andFilterWhere(['like', 'passport_serial', $this->passport_serial])
+            ->andFilterWhere(['like', 'passport_number', $this->passport_number])
+            ->andFilterWhere(['like', 'first_name', $this->full_name])
+            ->orFilterWhere(['like', 'last_name', $this->full_name])
+            ->orFilterWhere(['like', 'middle_name', $this->full_name])
+            ->andFilterWhere(['like', 'adress', $this->adress])
+            ->andFilterWhere(['like', 'password', $this->password]);
+
         return $dataProvider;
     }
 

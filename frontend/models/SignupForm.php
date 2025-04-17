@@ -120,6 +120,9 @@ class SignupForm extends Model
 
             $domen  = $_SERVER['HTTP_HOST'];
 
+            $user->cons_id = User::getDomen($domen, 'id') ?? 1;
+
+
             if ($domen == "edu.tgfu.uz") {
                 $user->cons_id = 2;
             }
